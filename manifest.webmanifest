@@ -1,0 +1,9 @@
+{
+  "name": "the watchlist",
+  "short_name": "watchlist",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#101014",
+  "theme_color": "#101014",
+  "description": "Your personal movie and series watchlist."
+}
