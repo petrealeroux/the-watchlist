@@ -1,13 +1,19 @@
 export default async function handler(req, res) {
   const token = process.env.TMDB_ACCESS_TOKEN
-  if (!token) return res.status(503).json({ error: 'TMDb is not configured yet. Add TMDB_ACCESS_TOKEN in Vercel environment variables.' })
-  const { type = 'search', query = '', id = '', media = 'movie' } = req.query
+  if (!token) return res.status(503).json({ error: 'TMDb is not configured. Add TMDB_ACCESS_TOKEN in Vercel environment variables.' })
+  const { type = 'search', query = '', id = '', media = 'movie', region = 'BE' } = req.query
   let path = ''
   if (type === 'search') {
     if (!query.trim()) return res.status(400).json({ error: 'Please enter a title.' })
     path = `/search/multi?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`
   } else if (type === 'providers' && id && ['movie', 'tv'].includes(media)) {
     path = `/${media}/${encodeURIComponent(id)}/watch/providers`
+  } else if (type === 'recommendations' && id && ['movie', 'tv'].includes(media)) {
+    path = `/${media}/${encodeURIComponent(id)}/recommendations?language=en-US&page=1`
+  } else if (type === 'trending') {
+    path = '/trending/all/week?language=en-US'
+  } else if (type === 'popular') {
+    path = '/movie/popular?language=en-US&page=1'
   } else {
     return res.status(400).json({ error: 'Unsupported request.' })
   }
